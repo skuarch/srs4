@@ -4,23 +4,24 @@ import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.ServerSocket;
 import java.net.Socket;
 import org.apache.log4j.Logger;
 
 /**
-*
-* @author skuarch
-*/
+ *
+ * @author skuarch
+ */
 public class IOUtilities {
 
     private static final Logger logger = Logger.getLogger(IOUtilities.class);
 
     //==========================================================================
     /**
-* close the socket and set it to null.
-*
-* @param socket
-*/
+     * close the socket and set it to null.
+     *     
+     * @param socket
+     */
     public static void closeSocket(Socket socket) {
 
         try {
@@ -39,10 +40,10 @@ public class IOUtilities {
 
     //==========================================================================
     /**
-* close the inputStream and set it to null.
-*
-* @param inputStream
-*/
+     * close the inputStream and set it to null.
+     *     
+     * @param inputStream
+     */
     public static void closeInputStream(InputStream inputStream) {
 
         try {
@@ -61,10 +62,10 @@ public class IOUtilities {
 
     //==========================================================================
     /**
-* close the outputStream and set it to null.
-*
-* @param outputStream
-*/
+     * close the outputStream and set it to null.
+     *     
+     * @param outputStream
+     */
     public static void closeOutputStream(OutputStream outputStream) {
 
         try {
@@ -83,10 +84,10 @@ public class IOUtilities {
 
     //==========================================================================
     /**
-* close the fileWriter and set it to null.
-*
-* @param fileWriter
-*/
+     * close the fileWriter and set it to null.
+     *     
+     * @param fileWriter
+     */
     public static void closeFileWriter(FileWriter fileWriter) {
 
         try {
@@ -102,13 +103,13 @@ public class IOUtilities {
         }
 
     } // end closeFileWriter
-    
+
     //==========================================================================
     /**
-* close the printWriter and set it to null.
-*
-* @param fileWriter
-*/
+     * close the printWriter and set it to null.
+     *     
+     * @param fileWriter
+     */
     public static void closePrintWriter(PrintWriter printWriter) {
 
         try {
@@ -124,5 +125,24 @@ public class IOUtilities {
         }
 
     } // end closeFileWriter    
-    
+
+    //==========================================================================
+    /**
+     * close ServerSocket and set it to null.
+     */
+    public static void closeServerSocket(ServerSocket serverSocket) {
+
+        try {
+
+            if (serverSocket != null) {
+                serverSocket.close();
+            }
+
+        } catch (Exception e) {
+            logger.error(e);
+        } finally {
+            serverSocket = null;
+        }
+
+    }
 } // end class 

@@ -1,9 +1,7 @@
 package srs;
 
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
+import common.SocketProccessor;
+import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 /**
@@ -12,46 +10,43 @@ import org.apache.log4j.PropertyConfigurator;
  */
 public class Main {
 
+    private static final Logger logger = Logger.getLogger(Main.class);
+
+    //==========================================================================
+    /**
+     * create a instance
+     */
+    public Main() {
+    } // end Main
+
     //==========================================================================
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
-        PropertyConfigurator.configure("configuration/log4j.properties");
 
-        ServerSocket serverSocket = null;
-        Socket socket = null;
-        InputStream inputStream = null;
-        ObjectInputStream objectInputStream = null;
+        PropertyConfigurator.configure("configuration/log4j.properties");
+        Runtime.getRuntime().addShutdownHook(new Main().shutdownHook);
 
         try {
 
-            serverSocket = new ServerSocket(8081);
-
-
-            while (true) {
-                socket = serverSocket.accept();
-
-                inputStream = socket.getInputStream();
-                objectInputStream = new ObjectInputStream(inputStream);
-
-                System.out.println(objectInputStream.readObject());
-
-
-                try {
-                    inputStream.close();
-                    objectInputStream.close();
-                    socket.close();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-
-            }
-
+            logger.info("*** start program ***");
+            logger.error("mocos wey");
+            new SocketProccessor().startServer();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     } // end main
+    
+    //==========================================================================
+    /**
+     * display a message before the program ends
+     */
+    private Thread shutdownHook = new Thread() {
+        @Override
+        public void run() {
+            logger.error("*** programm finished ***");
+        }
+    }; // end shutdownHook
 } // end class
