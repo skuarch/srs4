@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 /**
- *
+ * Main class that contains main method.
  * @author skuarch
  */
 public class Main {
@@ -30,9 +30,8 @@ public class Main {
 
         try {
 
-            logger.info("*** start program ***");
-            logger.error("mocos wey");
-            new SocketProccessor().startServer();
+            logger.info("*** start program ***");            
+            new SocketProccessor().startServer(8081);
 
         } catch (Exception e) {
             logger.error(e);
@@ -46,6 +45,7 @@ public class Main {
     private Thread shutdownHook = new Thread() {
         @Override
         public void run() {
+            System.out.println("*** programm finished ***");
             logger.error("*** programm finished ***");
         }
     }; // end shutdownHook

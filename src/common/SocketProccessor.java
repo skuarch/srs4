@@ -23,19 +23,20 @@ public class SocketProccessor {
     //==========================================================================
     /**
      * start to listen a socket.
+     * @param port int number of port.
      */
-    public void startServer() {
+    public void startServer(int port) {
 
         ServerSocket serverSocket = null;
 
         try {
 
-            serverSocket = new ServerSocket(8081);
-            logger.info("listening on port " + 8081);
+            serverSocket = new ServerSocket(port);
+            logger.info("listening on port " + port);
 
             while (true) {
 
-                //dispatch the client in another thread for continue listening
+                //dispatch the client in another thread in order to continue listening
                 new Thread(new RequestDispatcher(serverSocket.accept())).start();
 
             }

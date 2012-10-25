@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import util.IOUtilities;
 
 /**
- *
+ * Dispatch client.
  * @author skuarch
  */
 public class RequestDispatcher implements Runnable {
@@ -18,6 +18,10 @@ public class RequestDispatcher implements Runnable {
     private ObjectInputStream objectInputStream = null;
 
     //==========================================================================
+    /**
+     * create a instance.
+     * @param socket Socket
+     */
     public RequestDispatcher(Socket socket) {
         this.socket = socket;
     }
