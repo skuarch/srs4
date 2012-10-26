@@ -42,18 +42,15 @@ public class RequestDispatcher implements Runnable {
             return;
         }
 
+        Object receivedObject = null;
+
         try {
 
             logger.info("attending client " + ++client);
-            inputStream = socket.getInputStream();
-            objectInputStream = new ObjectInputStream(inputStream);
 
-            System.out.println(objectInputStream.readObject());
-
-            outputStream = socket.getOutputStream();
-            objectOutputStream = new ObjectOutputStream(outputStream);
-            objectOutputStream.writeObject("skuarch es tu papa");
-            objectOutputStream.flush();
+            receivedObject = receiveObject();
+            //attend request
+            sendObject(new Connectivity().connection());
 
         } catch (Exception e) {
             logger.error(e);
@@ -66,4 +63,35 @@ public class RequestDispatcher implements Runnable {
         }
 
     } // end run    
+
+    //==========================================================================
+    private Object receiveObject() {
+
+        Object object = null;
+
+        try {
+            inputStream = socket.getInputStream();
+            objectInputStream = new ObjectInputStream(inputStream);
+            object = objectInputStream.readObject();
+        } catch (Exception e) {
+            logger.error(e);
+        }
+
+        return object;
+
+    } // end receiveObject
+
+    //==========================================================================
+    private void sendObject(Object object) {
+
+        try {
+            outputStream = socket.getOutputStream();
+            objectOutputStream = new ObjectOutputStream(outputStream);
+            objectOutputStream.writeObject(object);
+            objectOutputStream.flush();
+        } catch (Exception e) {
+            logger.error(e);
+        }
+
+    } // end 
 } // end class
