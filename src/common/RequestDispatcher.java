@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.HashMap;
 import org.apache.log4j.Logger;
 import util.IOUtilities;
 
@@ -14,7 +15,7 @@ import util.IOUtilities;
  * @author skuarch
  */
 public class RequestDispatcher implements Runnable {
-
+    
     private static final Logger logger = Logger.getLogger(RequestDispatcher.class);
     private static int client = 0;
     private Socket socket = null;
@@ -36,22 +37,29 @@ public class RequestDispatcher implements Runnable {
     //==========================================================================
     @Override
     public void run() {
-
+        
         if (socket == null || socket.isClosed()) {
             logger.error("socket is null or close");
             return;
         }
-
-        Object receivedObject = null;
-
+        
+        HashMap hashMap = null;
+        String request = null;
+        
         try {
-
+            
             logger.info("attending client " + ++client);
+            
+            hashMap = (HashMap) receiveObject();
+            request = (String) hashMap.get("request");
 
-            receivedObject = receiveObject();
-            //attend request
-            sendObject(new Connectivity().connection());
-
+            //attending request
+            if (request.equals("connectivity")) {
+                sendObject(new Connectivity().connection());
+            } else if (request.equalsIgnoreCase("bandwidth overtime bits")) {
+                
+            }
+            
         } catch (Exception e) {
             logger.error(e);
         } finally {
@@ -61,14 +69,14 @@ public class RequestDispatcher implements Runnable {
             IOUtilities.closeOutputStream(objectOutputStream);
             IOUtilities.closeSocket(socket);
         }
-
+        
     } // end run    
 
     //==========================================================================
     private Object receiveObject() {
-
+        
         Object object = null;
-
+        
         try {
             inputStream = socket.getInputStream();
             objectInputStream = new ObjectInputStream(inputStream);
@@ -76,14 +84,14 @@ public class RequestDispatcher implements Runnable {
         } catch (Exception e) {
             logger.error(e);
         }
-
+        
         return object;
-
+        
     } // end receiveObject
 
     //==========================================================================
     private void sendObject(Object object) {
-
+        
         try {
             outputStream = socket.getOutputStream();
             objectOutputStream = new ObjectOutputStream(outputStream);
@@ -92,6 +100,7 @@ public class RequestDispatcher implements Runnable {
         } catch (Exception e) {
             logger.error(e);
         }
-
+        
     } // end 
 } // end class
+
